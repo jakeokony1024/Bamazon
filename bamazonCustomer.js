@@ -13,14 +13,13 @@ let connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     // run the function after the connection is made to prompt the user
-    afterConnection();
-
+    customerOrder();
+    
 });
 
-function afterConnection() {
+function customerOrder() {
     let choiceArray = [];
-    let newOrder;
-    let orderAmount;
+
     console.log("Retrieving Results... ")
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
@@ -51,35 +50,34 @@ function afterConnection() {
             ])
             .then(function (answer) {
                 let newOrder = answer.idAnswer;
-                let orderAmount = answer.newQuantity;
+                let orderAmount = parseInt(answer.newQuantity);
                 console.log("Item ID#: " + newOrder + "  Amount Ordered: " + orderAmount);
                 
                 if(newOrder in choiceArray){
-                    console.log("Ordering item. Updating Quantity")
+                    console.log("Ordering item, updating Quantity.")
+                    connection.query(
+                        "UPDATE products SET ? WHERE ?",[
+                            {
+                                quantity: --orderAmount
+                            },
+                            {
+                                item_id: newOrder
+                            }
+                        ],
+                        function (err,){
+                            if(err)throw err
+                        }
+                    )
                 }else{
-                    console.log()
+                    console.log("Insufficient Quantity!")
                 }
-                
+                connection.end()
             });
     })
 
-    connection.end();
-
+   
+    
 };
 
-// function updateProduct(){
 
-//     let query = connection.query(
-//         "UPDATE products SET ? WHERE ?",[
-//             {
-//                 quantity: -1
-//             },
-//             {
-//                 item_id: idAnswer
-//             }
-//         ],
-//         function (err){
-//             if(err)throw err
-//         }
-//     )
-// }
+
