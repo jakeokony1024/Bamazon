@@ -3,8 +3,8 @@ let inquirer = require("inquirer");
 let colors = require("colors");
 // create the connection information for the sql database
 let connection = mysql.createConnection({
-    host: "localhost",  
-    port: 3306, 
+    host: "localhost",
+    port: 3306,
     user: "root",
     password: "tomsucks12",
     database: "bamazon_db"
@@ -14,7 +14,8 @@ connection.connect(function (err) {
     if (err) throw err;
     // run the function after the connection is made to prompt the user
     customerOrder();
-    
+
+
 });
 
 function customerOrder() {
@@ -25,15 +26,16 @@ function customerOrder() {
         if (err) throw err;
 
         for (let i = 0; i < res.length; i++) {
-            console.log("ID: #" + res[i].item_id + "||" + "Item: ".green + res[i].product_name.brightCyan + "||" +
-                "Price:".yellow +  "$" + res[i].price);
+            
+            console.log("ID: #" + res[i].item_id + "||" + "Item: ".green + res[i].name.brightCyan + "||" +
+                "Price:".yellow + "$" + res[i].price + " " + res[i].quantity);
         }
         inquirer
             .prompt([{
                     name: "idAnswer",
                     type: "rawlist",
                     choices: function () {
-                       
+
                         for (let i = 0; i < res.length; i++) {
                             choiceArray.push(res[i].item_id);
                         }
@@ -49,35 +51,53 @@ function customerOrder() {
 
             ])
             .then(function (answer) {
-                let newOrder = answer.idAnswer;
+
+                let newOrder = parseInt(answer.idAnswer);
                 let orderAmount = parseInt(answer.newQuantity);
+                
                 console.log("Item ID#: " + newOrder + "  Amount Ordered: " + orderAmount);
                 
-                if(newOrder in choiceArray){
-                    console.log("Ordering item, updating Quantity.")
-                    connection.query(
-                        "UPDATE products SET ? WHERE ?",[
-                            {
-                                quantity: --orderAmount
-                            },
-                            {
-                                item_id: newOrder
+                for (let i = 0; i < res.length; i++) {
+                    let orgQuantity = res[i].quantity;
+                    let newAmount = parseInt(orgQuantity - orderAmount);
+                    if (newOrder === choiceArray[i]) {
+
+                        connection.query(
+
+                            "UPDATE products SET ? WHERE ?", [{
+                                
+                                    quantity: newAmount
+                                },
+                                {
+                                    item_id: newOrder
+
+                                }
+                            ],
+                            function (err, ) {
+                                if (err) throw err
                             }
-                        ],
-                        function (err,){
-                            if(err)throw err
-                        }
-                    )
-                }else{
-                    console.log("Insufficient Quantity!")
+                        )
+                    }   
                 }
-                connection.end()
+                second();
             });
     })
+}
+function second() {
+    inquirer
+        .prompt({
+            name: "orderOrExit",
+            type: "list",
+            message: "Would you like to keep shopping or proceed to checkout?",
+            choices: ["Checkout", "Keep Shopping"]
+        })
+        .then(function (answer) {
+            if (answer.orderOrExit === "Keep Shopping") {
+                customerOrder();
+            } else if (answer.orderOrExit === "Checkout") {
 
-   
-    
-};
+                connection.end();
+            }
+        })
 
-
-
+}

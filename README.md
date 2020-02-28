@@ -13,5 +13,7 @@ QUESTIONS FOR OFFICE HOURS
 
 How to update the products so that the amount ordered is the amount subtracted from the total quantity
 
+Why do all the options work except 12?
+
 
 
