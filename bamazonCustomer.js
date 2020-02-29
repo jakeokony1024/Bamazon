@@ -79,11 +79,11 @@ function customerOrder() {
                         )
                     }   
                 }
-                second();
+                shopOrDrop();
             });
     })
 }
-function second() {
+function shopOrDrop() {
     inquirer
         .prompt({
             name: "orderOrExit",
