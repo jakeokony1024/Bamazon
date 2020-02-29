@@ -1,7 +1,7 @@
 {
   "name": "bamazon",
   "version": "1.0.0",
-  "description": "",
+  "description": "Mock Amazon Ordering CLI",
   "main": "bamazonCustomer.js",
   "dependencies": {
     "colors": "^1.4.0",
