@@ -5,10 +5,11 @@ This is a mock ordering system application that strickly CL based. Once opened t
 The user can then make the choice to keep shopping, or to leave, if keep shopping is chosen, the ordering process is repeated, with the updated amounts for each item. If an order is greater than the quantity available, the user is given an error message and directed to chose an amount that is within the quantity available. 
 
 # Tech Used
-This application makes use of: * Node.js
-                               * Inquirer.js
-                               * Colors npm package
-                               * MySQL database
+This application makes use of: 
+* Node.js
+* Inquirer.js
+* Colors npm package
+* MySQL databse
 
 Below is a list of the next steps needed to complete the application fully. 
 
