@@ -6,10 +6,10 @@ The user can then make the choice to keep shopping, or to leave, if keep shoppin
 
 # Tech Used
 This application makes use of:
-*Node.js
-*inquirer.js
-*Colors npm package
-*MySQL database 
+-Node.js
+-inquirer.js
+-Colors npm package
+-MySQL database 
 
 Below is a list of the next steps needed to complete the application fully. 
 
